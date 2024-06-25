@@ -1,0 +1,25 @@
+docker run \
+  --name "/jolly_moore" \
+  --privileged \
+  --rm \
+  --runtime "runc" \
+  --volume "/proc:/host/proc:ro" \
+  --volume "/etc:/host/etc:ro" \
+  --volume "/var/run/docker.sock:/host/var/run/docker.sock" \
+  --log-driver "json-file" \
+  --restart "no" \
+  --network "bridge" \
+  --hostname "1bf23b4e3229" \
+  --env "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" \
+  --env "HOST_ROOT=/host" \
+  --env "HOME=/root" \
+  --label "maintainer"="cncf-falco-dev@lists.cncf.io" \
+  --label "org.opencontainers.image.source"="https://github.com/falcosecurity/falco" \
+  --label "usage"="docker run -i -t --privileged -v /var/run/docker.sock:/host/var/run/docker.sock -v /dev:/host/dev -v /proc:/host/proc:ro --name NAME IMAGE" \
+  --attach stdin \
+  --attach stdout \
+  --attach stderr \
+  --tty \
+  --interactive \
+  "falcosecurity/falco-no-driver:latest" \
+  "/usr/bin/falco" "-o" "time_format_iso_8601=true" 
