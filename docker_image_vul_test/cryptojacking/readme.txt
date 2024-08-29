@@ -1,0 +1,2 @@
+-> It is not exact replica of cryptojacking attack. 
+-> It calculates the value of pi using a CPU-intensive algorithm which replicates mathematical calculation which are going on while doing cryptomining.

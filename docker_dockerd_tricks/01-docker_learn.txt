@@ -1,0 +1,471 @@
+* What we do before there is no vm or contianer?
+-> The traditional way a business operates is by applications running on servers And each server would have one application 
+   running on it whether it is a website or database or email services.
+-> So, one application runs on one server because the operating systems didn't have the capability to run multiple applications 
+   securely on a single server.so for each new application we have to buy a new server and it is waste of money because 
+   instead of utilizing full resources of server we take a new server for every new application.
+-> So the solution of the above problem is virtual machines.
+
+
+* What is virtual machines?
+-> Virtual machines allows multiple applications to run on a single server by simulating hardware and software.
+-> So, we can create a multiple virtual or software based machines which have running different operating system and 
+   applications on a single hardware machine.
+
+
+* what is Hypervisors?
+-> A Hypervisor is software which creates and runs the virtualization.
+-> It allocates and controls the sharing of a machine's hardware resources(CPUs, RAM, Secondary Storage, etc...).
+-> Hypervisor is responsible for managing and allocating virtual resources(virtual cpu, virtual ram, virtual network card 
+   etc...) to each VMs.
+-> Hypervisor comes in two types: 1) Type 1 hypervisor (bare metal hypervisor) 2) Type 2 Hypervisor (Hosted hypervisor)
+-> Type 1 hypervisor : It runs directly on the host hardware. means install on a machine where no OS or any software was 
+                       installed.
+                     : Example of type 1 hypervisor are VMware ESXi, Citrix XenServer, Microsoft Hyper-v, etc...
+-> Type 2 hypervisor : it runs on top of an existing operating system.
+                     : example of type 2 hypervisor are oracle VM virtualBox, microsoft Virtual PC, VMware workstation.
+
+
+* How to build virtual machine?
+-> On the base there is a hardware such as a servers. On the top of that server there is a hypervisor software.
+-> On the top of the hypervisor there are the virtual machines and each of these will have their own operating system.
+-> On the top of the operating systems there is an application.
+
+
+* Common use cases of VMs.
+-> 1) To run diverse opearting system on same server.
+-> 2) Isolation because each VMs runs its own separate kernel and OS.
+-> 3) Legacy means VMs are well-suited for running legacy applications that rely on specific OS versions or configuration that 
+      might not be compatible with the host OS.
+
+
+* Benefits of VMs: 
+-> Saves money on hardware , electricity, maintenance and management.
+-> Portablity : they can easily transfer to another physical machine.
+-> Disaster management and recovery is easy.
+
+
+* Drawbacks of VMs: 
+-> Consume a lot of disk space,ram and cpu power. 
+-> They are slow to startup becuase they have an entire operating system they do time to boot up.
+-> Requires a license for each operating system which cost more money. so solution of these problem is containers.
+-> It could be vulnerable because it's running on same hardware and share the same CPU cores.And that CPU cores are 
+   vulnerable to attacks that aim at design flaws of microprocessors(like meltdown and spectre attacks).
+      -> for more about meltdown and spectre attacks referes to https://www.youtube.com/watch?v=bs0xswK0eZk
+
+
+* What is containers?
+-> VMs simulate an entire machine where as container only contain an application.
+-> So container is an application that's been packaged with all the files, configuration, dependencies necessary for it to run 
+   which means that it is bundled with everything that it needs to run on any computing environment without having to add 
+   anything else to that computer.
+-> Formal definition of container : A container is a way to package application with everything they need inside of that 
+   packages including the dependencies and all the configuration necessary.
+-> This package is easily shared and moved around between development team or development and operations team.(portable artifcat)
+-> This portability of containers and everything packaged in one isolated environment gives it some of the advantages that makes 
+   development and deployment process more efficent.
+-> Containers are boots up faster then VMs because there is only application is there in container where as VMs has whole 
+   operating system which takes time to boot up. 
+-> Docker, rkt(rocket) are some of the contianer solutions.
+
+
+* How to create a containers?
+-> On the base there is a hardware then on the top of the hardware is an operating system.
+-> Instead of the hypervisor containers will use a container engine like docker engine.
+-> The contianer engine : it unpacks the container files and then hands them of to the core of the operating system(kernel). 
+-> Container engine interacts with the host kernel to allocate resources and enforce isolation between containers and that is 
+   done through two things :
+   1) cgroups or control groups 
+         -> Control groups allocate resources among the proceses.
+         -> it allows for isolating and tracking resource utilization.
+   2) namespaces
+         -> Namespaces restrict a container's access and visibility to other resources on the system and that ensures that each 
+            contianer has its own isolated environment.
+
+
+* Why do we need containers ?
+-> Before container we have to install and configure most of all the services on OS directly of every machines of developers and 
+   run them on local development environment.and for different OS all the above steps are also different And because of that 
+   there may be a chances for the error in these installation processes.
+-> Suppose we have 10 different services then we have to install all the services individually on every machine.So, the concept 
+   of the container comes to solve some of the above problems.
+-> With containers we do not have to install any of the services directly on our operating system because the container has its 
+   own isolated operating system layer with linux based image. 
+-> so using container we can run same app with 2 different versions without any conflict.
+
+
+* What is images?
+-> Container images are lightweight, standalone and executable packages that include everything we need to run a software.
+-> Images can be configured with applications and used as a read-only template for creating containers.
+-> Images are organized in the form of layers. Every change in an image is added as a layer on top of it.
+-> Docker makes use of union file systems to combine these layers into a single image.union file systems allow files and 
+   directories of separate file systems, known as branches, to be transparently overlaid, forming a single coherant file system.
+
+
+* Docker containers : 
+-> These are the instances of the images that run in the docker engine. Each container is an isolated and self-sufficient 
+   environment that includes only the necessary components for running an application.
+-> containers are the writable layer of the image.
+
+
+* Use cases of container :
+-> 1) for running microservices based applications (for speeding up websites).
+-> 2) Rapid development and deployement.
+-> 3) Resource efficiency.
+
+
+* Disadvantages of containers over virtual machines : 
+-> Containers must be packaged to work with the same operting system of the server.
+-> if the server OS crashes, then the containers will go down.
+-> containers are less secure then VMs because they share same operating system and the isolation relies on the OS-level 
+   primitives.This means containers are exposed to a wider class of security vulnerabilities at the operating system level.
+
+
+NOTE : for utilizing the maximum power of the server and for more convenience and productivity we have to run both VMs and 
+       containers. 
+
+
+* Where do containers live ?
+-> Containers live in the container repository.
+-> This is a special type of storage for containers.
+-> There are some private repositories and public repositories.
+-> Registry is the service that provide storage for images and inside that registry we have multiple repostiories for all 
+   different application images.
+-> So each application gets it's own repository its own and in that repository we can store different versions or tags of that 
+   same application. 
+
+
+* How container make easier a deployment process?
+-> Before containers development team will produce artifacts together with a set of instructions of how to actually install and 
+   configure those artifacts on the server. 
+-> Now, development team would give those artifcats over to the operations team and the operations team will handle setting up 
+   the environment to deploy those applications.
+-> So, here problem is we have to install all these things on the OS directly which leads to conflicts with dependency version 
+   and multiple services running on the same host.
+-> Another kind of problem is when there is misunderstanding between the development team and operations because everything is 
+   in a textual guide as instructions then there could be cases where developers forget to mention some important points about 
+   configuration or operation team misinterpreted some of those instructions And because of these mistakes operation team has to 
+   go back to the developers to fix that kind of issues.
+-> with containers we package whole configuration in one container image and upload it on repository.so now operation team 
+   can directly fetch that image and run the container on their local machine with same configuration.
+
+
+* What is docker container ?
+-> It made up with the layers of images.
+-> We have layer of stacked images on top of each other.
+-> Container has no knowledge of Host operating system or files.
+-> So, at the base of the container we have linux based image specifically alpine:3.10 (because of it's smaller size) or any 
+   other linux distribution.
+-> On top of the base image we have application image.
+
+
+* Docker image and Docker container
+-> Image is an actual package (application package with configuration, dependencies,etc).
+-> Image is an artifact that can be moved around.
+-> When we pulled an image on local machine and start the application it will creates the container environment.
+-> So, if application are not running and only gathered then it's an image and if it is running then it's a container.
+
+
+* Docker vs Virtual Machine
+-> Docker and virtual machines both are virtualization tools.
+-> Operating system have two layers 1) application and 2) OS kernel
+   So, OS kernel layer communicate between hardware components and application run on the kernel layer.
+-> Docker virtualize the application layer and uses kernel of host on the other hand virtual machine has the applications layer 
+   and its own kernel so it virtualize the whole operating system.
+-> Size of the docker images are much smaller then the size of the virtual machine's image because docker images have to 
+   implement only one layer.And because of small size on same hardware can run more applications on docker containers then VMs.
+-> Docker containers are much faster than the virtual machines becuase every time we starts the VMs we have to boot the OS 
+   kernel and the applications where as in docker we have to just boot only applications becuase it uses host's kernel.
+-> we can run a virtual machine image of any operating system on any other operating system host but we can't do this with 
+   docker because if we use machine with windows kernel and we have to run a docker image which is made for linux based kernel 
+   then it doesn't compatible for windows kernel.
+
+
+* container port vs host port
+-> Multiple containers can run on host machine and there are some ports available on host machine
+-> so we have to bind container port and host port 
+
+
+* what is Docker network? 
+-> docker creates it's isolated network where all the containers are running in that network.
+-> when we deploy two containers in the same docker network they can talk to each other using container name without localhost 
+   port no.
+-> application which runs outside the docker's local network is going to connect to themselves with docker network using 
+   localhost and the port no.
+-> So in docker image which was made by us contains docker network and application which are not part of the docker network
+-> There are total 7  types of different drivers(network types) are available in docker
+   1) default bridge
+   2) user defined bridge
+   3) host
+   4) macvlan
+   5) IPVLAN (L2/L3)
+   6) overlay 
+   7) none
+
+
+
+* what is docker file? 
+-> to build an image from an application  we have to copy the content of that application into the docker file.
+-> so docker file is a blueprint for creating a docker images.
+
+*********************************************************************************************************************
+*********************************************************************************************************************
+*********************************************************************************************************************
+
+# Docker commands
+
+(BASIC DOCKER COMMANDS)
+
+* for pulling the image from docker hub and run the image
+-> docker pull <image_name>
+eg. docker pull redis
+
+* for checking images 
+-> docker images
+
+* to run the image <create new container> 
+-> docker run <image_name>:<version_tag>
+eg. docker run postgres:15.3
+
+* run image in detached mode
+-> docker run -d redis
+
+* To bind container port and host port
+-> docker run -p<host_port>:<container_port> <image_name>
+eg. docker run -p6000:6379 redis
+
+* give a name to the container 
+-> docker run -d -p50000:6379 --name <name_of_container> <image_Name>
+eg. docker run -d -p50000:6379 --name redis_first redis
+
+* we can give cpu-quota and cpu-period also
+-> docker run -d -p50001:6379 --name redis_second --cpu-period=100000 --cpu-quota=50000 redis
+
+* we can give only cpus(core) also equivalent to above mentioned cpu-quota and cpu-period
+-> docker run -d --cpus=".5" --name redis_third -p50002:6379 redis
+
+* for looking all running or not running containers (history)
+-> docker ps -a
+
+* to stop the running container 
+-> docker stop <container_name> or 
+docker stop <container_id>
+
+* to starting the stopped container 
+-> docker start <container_name> or 
+docker start <container_id>
+
+* remove container 
+-> docker rm <container_id> or docker rm <container_name>
+
+*********************************************************************************************************************
+(DOCKER-IMAGES)
+* for seeing all the images
+-> docker images
+
+* removing image from the docker list
+-> docker rmi <image_name>
+
+* for viewing all the dangling images
+-> docker images -f dangling=true
+
+* to remove the dangling images
+-> docker rmi $(docker image -f dangling=true -q)
+*********************************************************************************************************************
+(DOCKER-NETWORK)
+* for seeing all the network
+-> docker network ls
+
+* for create a new network 
+-> docker network create <new_network_name>
+eg. docker network  create mongo-network
+(for running both mongo and mongo-express in mongo-network we have to provide network option while running those container)
+{
+  eg. 
+  docker run -d
+  -p 27017:27017
+  -e MONGO_INITDB_ROOT_USERNAME=admin
+  -e MONGO_INITDB_ROOT_PASSWORD=password
+  --name mongodb
+  --net mongo-network
+}
+
+*********************************************************************************************************************
+(TROUBLESHOOTING FOR CONTAINER)
+* for viewing logs of the container 
+-> docker logs <container_id> or docker logs <container_name>
+
+* get the terminal of running container 
+-> docker exec -it <container_id> <file_location_of_terminal>
+eg. docker exec -it redis_first /bin/bash
+
+*********************************************************************************************************************
+*********************************************************************************************************************
+
+(CONNECTING CONTAINERS IN DOCKER NETWORK)
+
+* steps of the project my-app
+1) pull docker images from dockerhub using docker pull commands
+eg. docker pull mongo
+    docker pull mongo-express
+
+2) make network before running those two images
+eg. docker network create mongo-network
+
+3) run both images one by one (see how to configure on the offical documentation on the dockerhub from where we find the image)
+eg. docker run -d -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=password --name mongodb --net mongo-network mongo;
+    docker run -d -p 8081:8081 -e ME_CONFIG_MONGODB_ADMINUSERNAME=admin -e ME_CONFIG_MONGODB_ADMINPASSWORD=password -e ME_CONFIG_MONGODB_SERVER=mongodb --name mongo-express --net mongo-network mongo-express
+
+*********************************************************************************************************************
+*********************************************************************************************************************
+
+(DOCKER COMPOSE) 
+
+* what is docker compose? 
+-> to make running mutliple docker container with all the configuration much easier than with docker run command there is tool called docker compose.
+->  command for running docker 
+docker run -d --name mongodb -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=password --net mongo-network mongo
+
+*********************************************************************************************************************
+yaml template for above command 
+
+version: '3'                                          # version of docker compose
+services:                                             # list of all the containers
+# docker compose takes care of creating a common network
+  mongodb:                                            # container name 
+    image: mongo                                      # image name
+    ports: 
+      - 50000:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+*********************************************************************************************************************
+
+* for running above yaml file: 
+-> docker-compose -f <yaml_file_name> up
+  eg. docker-compose -f mongo-docker-compose.yaml up
+  -> description:
+      -f for file 
+      up for start
+      down for stop
+
+*********************************************************************************************************************
+*********************************************************************************************************************
+
+(DOCKER FILE)
+* need and syntex of Dockerfile
+-> Dockerfile is a blueprint for generating an image.
+-> So when we build image it follow Dockerfile's content.
+
+*********************************************************************************************************************
+
+*** Image environment blueprint
+
+install node 
+
+set MONGO_INITDB_ROOT_USERNAME=admin
+set MONGO_INITDB_ROOT_PASSWORD=password
+
+create /home/app folder
+
+copy current folder files to /home/app
+
+start the app with: "node server.js"
+
+*********************************************************************************************************************
+
+*** Dockerfile configuration
+
+# start by basing base image on another images.
+FROM node:16.4.2-apline3.14
+
+# set up environment variable   (Optionally define environment variables)
+ENV MONGO_DB_USERNAME=admin \
+    MONGO_DB_PWD=password
+
+# it makes directory inside the docker image not on the local host's mahcine
+RUN mkdir -p /home/app
+
+# it will copy the content of the file into the mentioned path in container
+# COPY source target
+COPY ./main-app /home/app
+
+CMD ["node", "/home/app/server.js"]
+
+*********************************************************************************************************************
+
+* what is the difference between run and cmd command in Dockerfile
+-> cmd is an entry point command. so we can have multiple run commands but only one cmd command. 
+
+* to build an image from Dockerfile?
+-> docker build -t <image_name>:<tag> <docker_file_location>
+ eg. docker build -t my_app:0.5 .
+
+*********************************************************************************************************************
+*********************************************************************************************************************
+(PUSHING DOCKER IMAGE ON REMOTE REPOSITORIES)
+
+* how to push docker image to the cloud repositories?
+-> 1) login to the private repostiories
+  docker login 
+  2) tag repository
+  docker tag <image_name>:<version> <registry>/<repository_name>:<image_version>
+  eg. docker tag my-app:0.50.0 jugalpatel01/my-app
+  3) push this image
+  docker push jugalpatel01/my-app
+
+(IMAGE NAMING IN DOCKEER REGISTRIES)
+registryDomain/imageName:tag
+eg. jugalpatel01/my-app:latest
+    jugalpatel01/my-app:0.50.0
+
+*********************************************************************************************************************
+*********************************************************************************************************************
+
+(DOCKER VOLUMES)
+
+* how to persisting data in container?
+-> for presisting data in stateful applications(like databases etc.) we use volumes in docker
+
+* when do we need Docker volumes?
+-> so, when we remove or restart the container then the data from the file system also gone from the container and it starts from the fresh state.so for saving those changes(data) we need  docker volumes.
+
+* what is docker volumes?
+-> we plug a physical file system path with container's file system path using volumes.
+-> means folder in physical host file system is mounted into the virtual file system of Docker.
+-> so when container writes to its file system, it gets replicated on the host file system directory and vice versa (like weif we made changes in host file system then it automatically replicated on the containers file system).
+-> so while we restart our container then it take fresh state start and after that it gets data automatically from the host file system becuase the data is stored there.
+  
+* different types of docker volumes.
+->  1) Host volumes
+    -> characteristic of this kind of volume is that we decide where on the host file system the reference is made 
+    -> docker run -v <host_directory>:<container_directory>
+    -> docker run -v /home/mount/data:/var/lib/mysql/data
+
+    2) Anonymous Volumes 
+    -> docker itself take care of choosing the host_directory. 
+    -> this directory created under the var/lib/docker/volumes/ path.
+    -> docker run -v /var/lib/mysql/data
+
+    3) Named Volumes
+    -> it is an impoved version of Anonymous volumes it specifies the name of the folder on the host file system  
+    -> docker run -v <name_of_directory>:<path_of_container_directory> 
+    -> docker run -v name:/var/lib/mysql/data 
+    -> this kind of volumes are used most widely becuase there are additional benefits to letting docker actually manage those volume direcotries on the host.
+    -> benefit of this kind of volumes is that we can mount a reference of the same folder on the host to more than one containers and this would be beneficial if these containers need to share the data.in this case, we would want the same volume name or reference to two different containers and we can mount them into different path inside of the container.
+
+  * how to use docker-volumes?
+  -> add volumes in the docker-compose file in each image for which we need a storage
+  -> we use name volumes
+  -> syntex: 
+    volumes:      # on image level
+      - <name_of_volume>:<path_of_container_directory_which need to store>
+
+  * where docker-volumes stores on host's machine?
+  -> on windows : C:/ProgramData/docker/volumes
+  -> on linux : /var/lib/docker/volumes
+
+
+*********************************************************************************************************************
+*********************************************************************************************************************
+*********************************************************************************************************************
